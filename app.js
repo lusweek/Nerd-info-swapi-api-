@@ -51,6 +51,9 @@ const getTitle = async (index) => {
 
             res blir av någon anlednign en promise som vi måste göra om till informationen vi vill använda. Dett gör vi genom att 
             skriva promise.all(fetchcaracters)
+
+            .sort sorterar i alfabetisk ordning.
+            .join gör om från en array till en string, vilket tar bort kommatäcken.
             */
             const fetchcaracters = posts[index].characters.map(post => {
                 return fetch(post).then(res => res.json())
@@ -60,8 +63,8 @@ const getTitle = async (index) => {
 
             document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
             `<p>${post.name}</p>`
-            ).join("")
-
+            ).sort().join("")
+            
         closeLoadingBox()
 } 
 
