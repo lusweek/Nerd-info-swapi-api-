@@ -19,6 +19,7 @@ inte få några kommatäcken.
 */
 const getMovies = async () => {
     openLoadingBox()
+
     const res = await fetch(`https://swapi.dev/api/films/`)
     const data = await res.json()
     posts = data.results
@@ -26,19 +27,23 @@ const getMovies = async () => {
         `<div onclick=" getTitle(${index});" class="movie-box"><h1>${post.title}</h1>
         <h1>${post.release_date}</h1>
         </div>`).join(""); 
+
         closeLoadingBox()
+
 };
 
 
 const getTitle = async (index) => {
 
     modal.style.display = "flex";
+    console.log(index)
+
 
     openLoadingBox()
 
-            document.querySelector(".modal-title")
-            .innerHTML = `<h1>${posts[index].title}</h1>`
-
+    // Här hämtar jag titeln
+    document.querySelector(".modal-title")
+    .innerHTML = `<h1>${posts[index].title}</h1>`
 
             /* I getMovies lades information in i posts. Där gav vi även varje box en index. map(value, index value) - mappar up varde 
             objekt i arrayen och ger en index till varje box. Varje box ger jag ett onklick event och en index. 
@@ -55,6 +60,82 @@ const getTitle = async (index) => {
             .sort sorterar i alfabetisk ordning.
             .join gör om från en array till en string, vilket tar bort kommatäcken.
             */
+
+        
+
+            const fetchcaracters = posts[index].characters.map(post => {
+                return fetch(post).then(res => res.json())
+            })
+
+            const result = await Promise.all(fetchcaracters);      
+        
+    closeLoadingBox()
+
+    // FRÅGA - varför behöver inte denna await? 
+            document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
+            `<p>${post.name}</p>`
+            ).sort().join("")
+           
+            //  onclick="nextFilm(index)
+
+    //------------------------------------- NÄSTA FILM -------------------------------------------//
+
+            document.querySelector("#next-film-btn").addEventListener("click", async () => {
+                openLoadingBox()
+                // Hämtar nästa titel
+                index += 1
+
+                if(index < posts.length) {
+                    console.log(index)
+                    document.querySelector(".modal-title")
+                    .innerHTML = `<h1>${posts[index].title}</h1>`
+    
+                    // hämtar karaktärer från nästa 
+                    const fetchcaracters = posts[index].characters.map(post => {
+                        return fetch(post).then(res => res.json())
+                    })
+        
+                    const result = await Promise.all(fetchcaracters);      
+        
+                    document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
+                    `<p>${post.name}</p>`
+                    ).sort().join("")
+                }else{
+                    index = 0
+                    document.querySelector(".modal-title")
+                    .innerHTML = `<h1>${posts[index].title}</h1>`
+    
+                    // hämtar karaktärer från nästa 
+                  
+                    const fetchcaracters = posts[index].characters.map(post => {
+                        return fetch(post).then(res => res.json())
+                    })
+        
+                    const result = await Promise.all(fetchcaracters);      
+        
+                    document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
+                    `<p>${post.name}</p>`
+                    ).sort().join("")
+            console.log(index)
+
+                }
+                closeLoadingBox()
+            })
+            
+
+    //------------------------------------- FÖRGÅENDE FILM -------------------------------------------//
+
+    document.querySelector("#previos-film-btn").addEventListener("click", async () => {
+        openLoadingBox()
+        
+        // Hämtar nästa titel
+        index -= 1
+
+        if(index < posts.length && index != -1) {
+            document.querySelector(".modal-title")
+            .innerHTML = `<h1>${posts[index].title}</h1>`
+
+            // hämtar karaktärer från nästa 
             const fetchcaracters = posts[index].characters.map(post => {
                 return fetch(post).then(res => res.json())
             })
@@ -64,6 +145,34 @@ const getTitle = async (index) => {
             document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
             `<p>${post.name}</p>`
             ).sort().join("")
+            console.log(index)
+
+        }else{
+            index = posts.length -1
+            document.querySelector(".modal-title")
+            .innerHTML = `<h1>${posts[index].title}</h1>`
+            console.log(index)
+
+
+            // hämtar karaktärer från nästa 
+          
+            const fetchcaracters = posts[index].characters.map(post => {
+                return fetch(post).then(res => res.json())
+
+            })
+
+            const result = await Promise.all(fetchcaracters);      
+
+            document.querySelector(".modal-cracters").innerHTML = result.map((post) =>  
+            `<p>${post.name}</p>`
+            ).sort().join("")
+        }
+        closeLoadingBox()
+    })
+               
+
+           
+            
             
         closeLoadingBox()
 } 

@@ -95,6 +95,7 @@ header h3, header h2, header h1{
     min-width: 275px;
     background-color: rgb(255, 240, 212);
     border-radius: 10px;
+    position: relative;
     display: flex;
     flex-direction: column;
 
@@ -157,6 +158,78 @@ header h3, header h2, header h1{
 .modal-info-box p{
     margin: 0 10px ;
 }
+
+#previos-film-btn{
+    position: absolute ;
+    left: 10px;
+    top: 50%;
+    animation-name: prev-btn;
+}
+
+#next-film-btn{
+    position: absolute ;
+    right: 10px;
+    top: 50%;
+    animation-name: next-btn;
+}
+
+#next-film-btn, 
+#previos-film-btn:hover{
+    animation-timing-function: linear;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-play-state: paused;
+}
+
+
+
+#next-film-btn:hover, 
+#previos-film-btn:hover{
+    animation-play-state: running;
+}
+
+@keyframes next-btn {
+    0% {
+     right: 10px;
+    }
+    25% {
+        right: 18px;
+    }
+    75% {
+        right: 3px;
+    }
+    100% {
+        right: 10px;
+    }
+ }
+
+ @keyframes prev-btn {
+    0% {
+     left: 10px;
+    }
+    25% {
+        left: 18px;
+    }
+    75% {
+        left: 3px;
+    }
+    100% {
+        left: 10px;
+    }
+ }
+
+#previos-film-btn, 
+#next-film-btn{ 
+font-size: 39px;
+background-color: rgb(226, 0, 0);
+color: rgb(0, 0, 223);
+border-radius: 50%;
+border: 3px solid rgb(95, 95, 95);
+}
+
+
+
+
 
 #movies{
     display: flex;
